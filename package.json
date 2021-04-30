@@ -1,0 +1,31 @@
+{
+  "name": "roving-index",
+  "version": "1.0.0",
+  "description": "turn list UI into a roving index UI",
+  "main": "dist/index.js",
+  "source": "index.js",
+  "exports": "./dist/index.modern.js",
+  "module": "dist/index.module.js",
+  "unpkg": "dist/index.umd.js",
+  "scripts": {
+    "build": "microbundle",
+    "dev": "microbundle watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/argyleink/roving-index.git"
+  },
+  "keywords": [
+    "accessibility",
+    "ux"
+  ],
+  "author": "Adam Argyle",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/argyleink/roving-index/issues"
+  },
+  "homepage": "https://github.com/argyleink/roving-index#readme",
+  "devDependencies": {
+    "microbundle": "^0.13.0"
+  }
+}
