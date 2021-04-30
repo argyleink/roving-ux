@@ -1,7 +1,7 @@
 {
-  "name": "roving-index",
+  "name": "roving-ux",
   "version": "1.0.0",
-  "description": "turn list UI into a roving index UI",
+  "description": "stateful roving index for web ui",
   "main": "dist/index.js",
   "source": "index.js",
   "exports": "./dist/index.modern.js",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/argyleink/roving-index.git"
+    "url": "git+https://github.com/argyleink/roving-ux.git"
   },
   "keywords": [
     "accessibility",
@@ -22,9 +22,9 @@
   "author": "Adam Argyle",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/argyleink/roving-index/issues"
+    "url": "https://github.com/argyleink/roving-ux/issues"
   },
-  "homepage": "https://github.com/argyleink/roving-index#readme",
+  "homepage": "https://github.com/argyleink/roving-ux#readme",
   "devDependencies": {
     "microbundle": "^0.13.0"
   }
