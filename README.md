@@ -17,7 +17,6 @@ npm i roving-ux
 
 ### Importing
 ```js
-// import the blingbling y'all
 import {rovingIndex} from 'roving-ux'              // es6 module
 const rovingIndex = require('roving-ux')           // commonjs
 ```
