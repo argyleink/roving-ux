@@ -9,6 +9,11 @@
 
 <br>
 
+**Learn more** in [this article by Rob Dodson on web.dev](https://web.dev/control-focus-with-tabindex/)  
+**Try it** at this [GUI Challenge](https://gui-challenges.web.app/media-scroller/dist/) (use `tab` then `left || right` arrows)
+
+<br>
+
 ###### Getting Started
 ### Installation
 ```bash
