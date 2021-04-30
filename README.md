@@ -19,11 +19,18 @@
 ```bash
 npm i roving-ux
 ```
+Use the SkyPack CDN https://cdn.skypack.dev/roving-ux
+
+<br>
 
 ### Importing
 ```js
-import {rovingIndex} from 'roving-ux'              // es6 module
-const rovingIndex = require('roving-ux')           // commonjs
+// import from CDN
+import {rovingIndex} from 'https://cdn.skypack.dev/roving-ux' // cdn es2020
+
+// import from NPM
+import {rovingIndex} from 'roving-ux'      // npm es6/common modules
+const rovingIndex = require('roving-ux')   // commonjs
 ```
 
 <br>
