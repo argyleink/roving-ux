@@ -25,10 +25,35 @@ const rovingIndex = require('roving-ux')           // commonjs
 
 ###### Syntax
 
-### Quick Overview
+### Quick API Overview
 ```js
 rovingIndex({
   element: node,     // required: the container to get roving index ux
   target: "#foo",    // optional: a query selector for which children should be focusable
 })
+```
+
+### Example Usage
+```js
+import {rovingIndex} from 'roving-ux'
+
+// just one roving ux container
+// roving-ux will use direct children as focus targets
+rovingIndex({
+  element: document.querySelector('#carousel')
+})
+```
+
+```js
+import {rovingIndex} from 'roving-ux'
+
+// many roving ux containers
+// passes a custom query selector so the proper elements get focus
+document.querySelectorAll('.horizontal-media')
+  .forEach(scroller => {
+    rovingIndex({
+      element: scroller,
+      target: 'a',
+    })
+  })
 ```
