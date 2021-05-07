@@ -12,6 +12,14 @@
 **Learn more** in [this article by Rob Dodson on web.dev](https://web.dev/control-focus-with-tabindex/)  
 **Try it** at this [GUI Challenge](https://gui-challenges.web.app/media-scroller/dist/) (use `tab` then `left || right` arrows)
 
+
+<br>
+
+###### Features & Why
+1️⃣ User's shouldn't need to tab through each item in a list to see the next list  
+2️⃣ Providing keyboard list UX should be easy  
+3️⃣ Maintaining the last focused element should be easy  
+
 <br>
 
 ###### Getting Started
