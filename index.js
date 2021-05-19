@@ -1,15 +1,12 @@
-const KEYCODE = {
-  LEFT:  37,
-  RIGHT: 39,
-}
-
 const state = new Map()
 
-export const rovingIndex = ({element:rover, target:selector}) => {
+export const rovingIndex = ({ element: rover, target: selector, prev, next, }) => {
   // this api allows empty or a query string
   const target_query = selector || ':scope *'
   const targets = rover.querySelectorAll(target_query)
   const startingPoint = targets[0]
+  prev = prev || ['ArrowLeft', 'Left']
+  next = next || ['ArrowRight', 'Right']
 
   // take container out of the focus flow
   rover.tabIndex = -1
@@ -34,17 +31,18 @@ export const rovingIndex = ({element:rover, target:selector}) => {
     state.set('last_rover', rover)
   })
 
-  // watch for arrow keys
+
+  // watch for keys
   rover.addEventListener('keydown', e => {
-    switch (e.keyCode) {
-      case KEYCODE.RIGHT:
-        e.preventDefault()
-        focusNextItem(rover)
-        break
-      case KEYCODE.LEFT:
-        e.preventDefault()
-        focusPreviousItem(rover)
-        break
+    if (next.includes(e.key)) {
+      e.preventDefault()
+      focusNextItem(rover)
+      return
+    }
+    if (prev.includes(e.key)) {
+      e.preventDefault()
+      focusPreviousItem(rover)
+      return
     }
   })
 }
