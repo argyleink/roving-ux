@@ -1,6 +1,6 @@
 {
   "name": "roving-ux",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "stateful roving index for web ui",
   "main": "dist/index.js",
   "source": "index.js",
