@@ -27,7 +27,8 @@
 ```bash
 npm i roving-ux
 ```
-Use the SkyPack CDN https://cdn.skypack.dev/roving-ux
+Use the SkyPack CDN https://cdn.skypack.dev/roving-ux  
+Looking for a React version, here ya go! https://www.npmjs.com/package/roving-ux-react
 
 <br>
 
