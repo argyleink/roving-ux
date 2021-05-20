@@ -1,6 +1,8 @@
 const KEYCODE = {
-  LEFT:  37,
+  LEFT: 37,
+  UP: 38,
   RIGHT: 39,
+  DOWN: 40,
 }
 
 const state = new Map()
@@ -38,10 +40,12 @@ export const rovingIndex = ({element:rover, target:selector}) => {
   rover.addEventListener('keydown', e => {
     switch (e.keyCode) {
       case KEYCODE.RIGHT:
+      case KEYCODE.DOWN:
         e.preventDefault()
         focusNextItem(rover)
         break
       case KEYCODE.LEFT:
+      case KEYCODE.UP:
         e.preventDefault()
         focusPreviousItem(rover)
         break
