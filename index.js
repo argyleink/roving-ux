@@ -61,21 +61,24 @@ export const rovingIndex = function({element:rover, target:selector}) {
   // watch for arrow keys
   rover.addEventListener('keydown', listeners.keydown)
 
-  this.rover = rover;
-  this.listeners = listeners;
+  this.rover = rover
+  this.targets = targets
+  this.listeners = listeners
 
-  return this;
+  return this
 }
 
 rovingIndex.prototype.destroy = function() {
-  const {rover, listeners} = this
+  const {rover, targets, listeners} = this
 
   rover.removeEventListener('focusin', listeners.focusin)
   rover.removeEventListener('keydown', listeners.keydown)
+  targets.forEach(a => a.tabIndex = '')
 
   state.delete(rover)
 
   delete this.rover
+  delete this.targets
   delete this.listeners
 }
 
