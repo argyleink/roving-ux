@@ -7,7 +7,11 @@ const KEYCODE = {
 
 const state = new Map()
 
-export const rovingIndex = ({element:rover, target:selector}) => {
+export const rovingIndex = function({element:rover, target:selector}) {
+  if (!(this instanceof rovingIndex)) {
+    return new rovingIndex({element:rover, target:selector})
+  }
+
   // this api allows empty or a query string
   const target_query = selector || ':scope *'
   const targets = rover.querySelectorAll(target_query)
@@ -27,30 +31,52 @@ export const rovingIndex = ({element:rover, target:selector}) => {
     active: startingPoint,
     index: 0,
   })
-    
-  // when container or children get focus
-  rover.addEventListener('focusin', _ => {
-    if (state.get('last_rover') == rover) return
 
-    activate(rover, state.get(rover).active)
-    state.set('last_rover', rover)
-  })
+  const listeners = {
+    focusin: _ => {
+      if (state.get('last_rover') == rover) return
+
+      activate(rover, state.get(rover).active)
+      state.set('last_rover', rover)
+    },
+    keydown: e => {
+      switch (e.keyCode) {
+        case KEYCODE.RIGHT:
+        case KEYCODE.DOWN:
+          e.preventDefault()
+          focusNextItem(rover)
+          break
+        case KEYCODE.LEFT:
+        case KEYCODE.UP:
+          e.preventDefault()
+          focusPreviousItem(rover)
+          break
+      }
+    },
+  }
+
+  // when container or children get focus
+  rover.addEventListener('focusin', listeners.focusin)
 
   // watch for arrow keys
-  rover.addEventListener('keydown', e => {
-    switch (e.keyCode) {
-      case KEYCODE.RIGHT:
-      case KEYCODE.DOWN:
-        e.preventDefault()
-        focusNextItem(rover)
-        break
-      case KEYCODE.LEFT:
-      case KEYCODE.UP:
-        e.preventDefault()
-        focusPreviousItem(rover)
-        break
-    }
-  })
+  rover.addEventListener('keydown', listeners.keydown)
+
+  this.rover = rover;
+  this.listeners = listeners;
+
+  return this;
+}
+
+rovingIndex.prototype.destroy = function() {
+  const {rover, listeners} = this
+
+  rover.removeEventListener('focusin', listeners.focusin)
+  rover.removeEventListener('keydown', listeners.keydown)
+
+  state.delete(rover)
+
+  delete this.rover
+  delete this.listeners
 }
 
 const focusNextItem = rover => {
