@@ -27,17 +27,18 @@ export const rovingIndex = ({element:rover, target:selector}) => {
     active: startingPoint,
     index: 0,
   })
-    
+
   // when container or children get focus
-  rover.addEventListener('focusin', _ => {
+  const onFocusin = _ => {
     if (state.get('last_rover') == rover) return
 
     activate(rover, state.get(rover).active)
     state.set('last_rover', rover)
-  })
+  }
+  rover.addEventListener('focusin', onFocusin)
 
   // watch for arrow keys
-  rover.addEventListener('keydown', e => {
+  const onKeydown = e => {
     switch (e.keyCode) {
       case KEYCODE.RIGHT:
       case KEYCODE.DOWN:
@@ -50,7 +51,19 @@ export const rovingIndex = ({element:rover, target:selector}) => {
         focusPreviousItem(rover)
         break
     }
-  })
+  }
+  rover.addEventListener('keydown', onKeydown)
+
+  const cleanup = _ => {
+    rover.removeEventListener('focusin', onFocusin)
+    rover.removeEventListener('keydown', onKeydown)
+    rover.removeEventListener('DOMNodeRemoved', cleanup)
+
+    state.delete(rover)
+    targets.forEach(a => a.tabIndex = '')
+  }
+
+  rover.addEventListener('DOMNodeRemoved', cleanup)
 }
 
 const focusNextItem = rover => {
