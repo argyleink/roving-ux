@@ -63,7 +63,7 @@ export const rovingIndex = ({element:rover, target:selector}) => {
     targets.forEach(a => a.tabIndex = '')
   }
 
-  rover.addEventListener('DOMNodeRemoved', cleanup)
+  rover.addEventListener('DOMNodeRemovedFromDocument', cleanup)
 }
 
 const focusNextItem = rover => {
