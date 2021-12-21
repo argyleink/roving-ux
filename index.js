@@ -8,6 +8,7 @@ const KEYCODE = {
 const state = new Map()
 
 export const rovingIndex = ({element:rover, target:selector}) => {
+  const isRtl = window.getComputedStyle(document.documentElement).direction === 'rtl';
   // this api allows empty or a query string
   const target_query = selector || ':scope *'
   const targets = rover.querySelectorAll(target_query)
@@ -40,12 +41,12 @@ export const rovingIndex = ({element:rover, target:selector}) => {
   // watch for arrow keys
   const onKeydown = e => {
     switch (e.keyCode) {
-      case KEYCODE.RIGHT:
+      case KEYCODE[isRtl ? 'LEFT' : 'RIGHT']:
       case KEYCODE.DOWN:
         e.preventDefault()
         focusNextItem(rover)
         break
-      case KEYCODE.LEFT:
+      case KEYCODE[isRtl ? 'RIGHT' : 'LEFT']:
       case KEYCODE.UP:
         e.preventDefault()
         focusPreviousItem(rover)

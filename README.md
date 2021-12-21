@@ -19,6 +19,7 @@
 1️⃣ User's shouldn't need to tab through each item in a list to see the next list  
 2️⃣ Providing keyboard list UX should be easy  
 3️⃣ Maintaining the last focused element should be easy  
+4️⃣ RTL Support  
 
 <br>
 
@@ -35,10 +36,10 @@ Looking for a React version, here ya go! https://www.npmjs.com/package/roving-ux
 ### Importing
 ```js
 // import from CDN
-import {rovingIndex} from 'https://cdn.skypack.dev/roving-ux' // cdn es2020
+import { rovingIndex } from 'https://cdn.skypack.dev/roving-ux' // cdn es2020
 
 // import from NPM
-import {rovingIndex} from 'roving-ux'      // npm es6/common modules
+import { rovingIndex } from 'roving-ux'      // npm es6/common modules
 const rovingIndex = require('roving-ux')   // commonjs
 ```
 
@@ -56,7 +57,7 @@ rovingIndex({
 
 ### Example Usage
 ```js
-import {rovingIndex} from 'roving-ux'
+import { rovingIndex } from 'roving-ux'
 
 // just one roving ux container
 // roving-ux will use direct children as focus targets
@@ -66,7 +67,7 @@ rovingIndex({
 ```
 
 ```js
-import {rovingIndex} from 'roving-ux'
+import { rovingIndex } from 'roving-ux'
 
 // many roving ux containers
 // passes a custom query selector so the proper elements get focus
