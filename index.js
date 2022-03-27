@@ -6,6 +6,51 @@ const KEYCODE = {
 }
 
 const state = new Map()
+// when container or children get focus
+const onFocusin = e => {
+  const {target: rover} = e
+  if (state.get('last_rover') == rover) return
+  if (state.has(rover)) {
+    activate(rover, state.get(rover).active)
+    state.set('last_rover', rover)
+  }
+}
+const onKeydown = e => {
+  const {target: rover} = e
+  switch (e.keyCode) {
+    case KEYCODE[isRtl ? 'LEFT' : 'RIGHT']:
+    case KEYCODE.DOWN:
+      e.preventDefault()
+      focusNextItem(rover)
+      break
+    case KEYCODE[isRtl ? 'RIGHT' : 'LEFT']:
+    case KEYCODE.UP:
+      e.preventDefault()
+      focusPreviousItem(rover)
+      break
+  }
+}
+const mo = new MutationObserver((mutationList, observer) =>{
+  mutationList.forEach(mutation => {
+     if(mutation.removedNodes.length > 0){
+       mutation.removedNodes.forEach(e => {
+         if (state.has(e)) {
+           const currentEl = state.get(e);
+           e.removeEventListener('focusin', onFocusin)
+           e.removeEventListener('keydown', onKeydown)
+           state.delete(e)
+           currentEl.targets.forEach(a => a.tabIndex = '') 
+           const keys = [...state.keys()]?.filter(x => x!=='last_rover')           
+           if (keys.length === 0) {
+             state.clear();
+            // console.log('stop observing');
+             mo.disconnect()
+           }
+          }
+        })
+      }
+   })
+ })         
 
 export const rovingIndex = ({element:rover, target:selector}) => {
   const isRtl = window.getComputedStyle(document.documentElement).direction === 'rtl';
@@ -30,41 +75,24 @@ export const rovingIndex = ({element:rover, target:selector}) => {
   })
 
   // when container or children get focus
-  const onFocusin = _ => {
-    if (state.get('last_rover') == rover) return
+  // const onFocusin = _ => {
+  //   if (state.get('last_rover') == rover) return
 
-    activate(rover, state.get(rover).active)
-    state.set('last_rover', rover)
-  }
+  //   activate(rover, state.get(rover).active)
+  //   state.set('last_rover', rover)
+  // }
   rover.addEventListener('focusin', onFocusin)
 
   // watch for arrow keys
-  const onKeydown = e => {
-    switch (e.keyCode) {
-      case KEYCODE[isRtl ? 'LEFT' : 'RIGHT']:
-      case KEYCODE.DOWN:
-        e.preventDefault()
-        focusNextItem(rover)
-        break
-      case KEYCODE[isRtl ? 'RIGHT' : 'LEFT']:
-      case KEYCODE.UP:
-        e.preventDefault()
-        focusPreviousItem(rover)
-        break
-    }
-  }
+  
   rover.addEventListener('keydown', onKeydown)
 
-  const cleanup = _ => {
-    rover.removeEventListener('focusin', onFocusin)
-    rover.removeEventListener('keydown', onKeydown)
-    rover.removeEventListener('DOMNodeRemoved', cleanup)
-
-    state.delete(rover)
-    targets.forEach(a => a.tabIndex = '')
-  }
-
-  rover.addEventListener('DOMNodeRemovedFromDocument', cleanup)
+  //  replace rover.addEventListener('DOMNodeRemovedFromDocument', cleanup)
+  // with mutationObserver
+  mo.observe(document, {
+    childList: true,
+    subtree: true
+  }) 
 }
 
 const focusNextItem = rover => {
