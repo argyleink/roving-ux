@@ -35,29 +35,29 @@ const mo = new MutationObserver((mutationList, observer) =>{
   state.forEach((v,k) =>{
     stateElementsSet.add(k.classList[0])
   } )
-  const qs = [...stateElementsSet].map(x => `.${x}`).join(',');
-  mutationList.forEach(mutation => {
-     if(mutation.removedNodes.length > 0){
-       mutation.removedNodes.forEach(removedEl => {
-         if (removedEl.nodeType !== 1) return //only elements
-         const e = state.has(removedEl) 
-         ? removedEl 
-         : removedEl.querySelector(qs); 
-         if (state.has(e) ) {
-           const currentEl = state.get(e);
-           e.removeEventListener('focusin', onFocusin)
-           e.removeEventListener('keydown', onKeydown)
-           state.delete(e)
-           currentEl.targets.forEach(a => a.tabIndex = '') 
-           const keys = [...state.keys()]?.filter(x => x!=='last_rover')           
-           if (keys.length === 0) {
-             state.clear();
-            //  console.log('stop observing');
-             mo.disconnect()
-           }
+  mutationList
+    .filter(x => x.removedNodes.length > 0)
+    .forEach(mutation => {
+      mutation.removedNodes.forEach(removedEl => {
+      if (removedEl.nodeType !== 1) return //only elements
+        state.forEach((val,key) => {
+          if (key ==='last_rover') return;
+          if (removedEl.contains(key)) {
+            const currentEl = val;
+            key.removeEventListener('focusin', onFocusin)
+            key.removeEventListener('keydown', onKeydown)
+            state.delete(key)
+            currentEl.targets.forEach(a => a.tabIndex = '') 
+            const keys = [...state.keys()]?.filter(x => x!=='last_rover')           
+            if (keys.length === 0) {
+              state.clear();
+              // console.log('stop observing');
+              mo.disconnect()
+            }
           }
-        })
-      }
+      })
+    })
+      
    })
  })         
 
