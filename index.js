@@ -8,7 +8,7 @@ const KEYCODE = {
 const state = new Map()
 // when container or children get focus
 const onFocusin = e => {
-  const {target: rover} = e
+  const {currentTarget: rover} = e
   if (state.get('last_rover') == rover) return
   if (state.has(rover)) {
     activate(rover, state.get(rover).active)
@@ -16,7 +16,7 @@ const onFocusin = e => {
   }
 }
 const onKeydown = e => {
-  const {target: rover} = e
+  const {currentTarget: rover} = e
   switch (e.keyCode) {
     case KEYCODE[isRtl ? 'LEFT' : 'RIGHT']:
     case KEYCODE.DOWN:
@@ -31,10 +31,19 @@ const onKeydown = e => {
   }
 }
 const mo = new MutationObserver((mutationList, observer) =>{
+  const stateElementsSet = new Set();
+  state.forEach((v,k) =>{
+    stateElementsSet.add(k.classList[0])
+  } )
+  const qs = [...stateElementsSet].map(x => `.${x}`).join(',');
   mutationList.forEach(mutation => {
      if(mutation.removedNodes.length > 0){
-       mutation.removedNodes.forEach(e => {
-         if (state.has(e)) {
+       mutation.removedNodes.forEach(removedEl => {
+         if (removedEl.nodeType !== 1) return //only elements
+         const e = state.has(removedEl) 
+         ? removedEl 
+         : removedEl.querySelector(qs); 
+         if (state.has(e) ) {
            const currentEl = state.get(e);
            e.removeEventListener('focusin', onFocusin)
            e.removeEventListener('keydown', onKeydown)
@@ -43,7 +52,7 @@ const mo = new MutationObserver((mutationList, observer) =>{
            const keys = [...state.keys()]?.filter(x => x!=='last_rover')           
            if (keys.length === 0) {
              state.clear();
-            // console.log('stop observing');
+            //  console.log('stop observing');
              mo.disconnect()
            }
           }
