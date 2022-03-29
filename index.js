@@ -17,6 +17,7 @@ const onFocusin = e => {
 }
 const onKeydown = e => {
   const {currentTarget: rover} = e
+  const isRtl = window.getComputedStyle(document.documentElement).direction === 'rtl'; 
   switch (e.keyCode) {
     case KEYCODE[isRtl ? 'LEFT' : 'RIGHT']:
     case KEYCODE.DOWN:
@@ -31,23 +32,19 @@ const onKeydown = e => {
   }
 }
 const mo = new MutationObserver((mutationList, observer) =>{
-  const stateElementsSet = new Set();
-  state.forEach((v,k) =>{
-    stateElementsSet.add(k.classList[0])
-  } )
   mutationList
     .filter(x => x.removedNodes.length > 0)
     .forEach(mutation => {
-      mutation.removedNodes.forEach(removedEl => {
-      if (removedEl.nodeType !== 1) return //only elements
+      [...mutation.removedNodes]
+      .filter(x => x.nodeType === 1)
+      .forEach(removedEl => {
         state.forEach((val,key) => {
           if (key ==='last_rover') return;
           if (removedEl.contains(key)) {
-            const currentEl = val;
             key.removeEventListener('focusin', onFocusin)
             key.removeEventListener('keydown', onKeydown)
             state.delete(key)
-            currentEl.targets.forEach(a => a.tabIndex = '') 
+            val.targets.forEach(a => a.tabIndex = '') 
             const keys = [...state.keys()]?.filter(x => x!=='last_rover')           
             if (keys.length === 0) {
               state.clear();
@@ -62,7 +59,6 @@ const mo = new MutationObserver((mutationList, observer) =>{
  })         
 
 export const rovingIndex = ({element:rover, target:selector}) => {
-  const isRtl = window.getComputedStyle(document.documentElement).direction === 'rtl';
   // this api allows empty or a query string
   const target_query = selector || ':scope *'
   const targets = rover.querySelectorAll(target_query)
