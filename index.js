@@ -45,8 +45,7 @@ const mo = new MutationObserver((mutationList, observer) =>{
             key.removeEventListener('keydown', onKeydown)
             state.delete(key)
             val.targets.forEach(a => a.tabIndex = '') 
-            const keys = [...state.keys()]?.filter(x => x!=='last_rover')           
-            if (keys.length === 0) {
+            if (state.size === 0 || (state.size === 1 && state.has('last_rover'))) {
               state.clear();
               // console.log('stop observing');
               mo.disconnect()
