@@ -1,6 +1,6 @@
 {
   "name": "roving-ux",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "stateful roving index for web ui",
   "main": "dist/index.js",
   "source": "index.js",
@@ -26,6 +26,6 @@
   },
   "homepage": "https://github.com/argyleink/roving-ux#readme",
   "devDependencies": {
-    "microbundle": "^0.13.0"
+    "microbundle": "^0.14.2"
   }
 }

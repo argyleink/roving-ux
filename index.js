@@ -1,3 +1,6 @@
+const state = new Map()
+const isRtl = window.getComputedStyle(document.documentElement).direction === 'rtl'
+
 const KEYCODE = {
   LEFT: 37,
   UP: 38,
@@ -5,7 +8,6 @@ const KEYCODE = {
   DOWN: 40,
 }
 
-const state = new Map()
 // when container or children get focus
 const onFocusin = e => {
   const {currentTarget: rover} = e
@@ -15,9 +17,10 @@ const onFocusin = e => {
     state.set('last_rover', rover)
   }
 }
+
 const onKeydown = e => {
   const {currentTarget: rover} = e
-  const isRtl = window.getComputedStyle(document.documentElement).direction === 'rtl'; 
+
   switch (e.keyCode) {
     case KEYCODE[isRtl ? 'LEFT' : 'RIGHT']:
     case KEYCODE.DOWN:
@@ -31,31 +34,32 @@ const onKeydown = e => {
       break
   }
 }
-const mo = new MutationObserver((mutationList, observer) =>{
+
+const mo = new MutationObserver((mutationList, observer) => {
   mutationList
     .filter(x => x.removedNodes.length > 0)
     .forEach(mutation => {
       [...mutation.removedNodes]
-      .filter(x => x.nodeType === 1)
-      .forEach(removedEl => {
-        state.forEach((val,key) => {
-          if (key ==='last_rover') return;
-          if (removedEl.contains(key)) {
-            key.removeEventListener('focusin', onFocusin)
-            key.removeEventListener('keydown', onKeydown)
-            state.delete(key)
-            val.targets.forEach(a => a.tabIndex = '') 
-            if (state.size === 0 || (state.size === 1 && state.has('last_rover'))) {
-              state.clear();
-              // console.log('stop observing');
-              mo.disconnect()
+        .filter(x => x.nodeType === 1)
+        .forEach(removedEl => {
+          state.forEach((val,key) => {
+            if (key ==='last_rover') return
+            if (removedEl.contains(key)) {
+              key.removeEventListener('focusin', onFocusin)
+              key.removeEventListener('keydown', onKeydown)
+
+              state.delete(key)
+              val.targets.forEach(a => a.tabIndex = '') 
+
+              if (state.size === 0 || (state.size === 1 && state.has('last_rover'))) {
+                state.clear()
+                mo.disconnect()
+              }
             }
-          }
-      })
+          })
+        })
     })
-      
-   })
- })         
+})         
 
 export const rovingIndex = ({element:rover, target:selector}) => {
   // this api allows empty or a query string
@@ -79,13 +83,9 @@ export const rovingIndex = ({element:rover, target:selector}) => {
   })
 
   rover.addEventListener('focusin', onFocusin)
-
   // watch for arrow keys
-  
   rover.addEventListener('keydown', onKeydown)
 
-  //  replace rover.addEventListener('DOMNodeRemovedFromDocument', cleanup)
-  // with mutationObserver
   mo.observe(document, {
     childList: true,
     subtree: true
