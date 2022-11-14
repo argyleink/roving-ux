@@ -7,9 +7,9 @@
   "exports": "./dist/index.modern.js",
   "module": "dist/index.module.js",
   "unpkg": "dist/index.umd.js",
-  "types": "dist/index.d.ts",
+  "types": "index.d.ts",
   "scripts": {
-    "build": "microbundle && cp index.d.ts ./dist/",
+    "build": "microbundle",
     "dev": "microbundle watch"
   },
   "repository": {
